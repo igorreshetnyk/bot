@@ -1,7 +1,6 @@
 const parseModule = require("./parse");
-
 const TelegramBot = require("node-telegram-bot-api");
-const token = "";
+const token = " ";
 const bot = new TelegramBot(token, { polling: true });
 
 bot.onText(/\/curse/, (msg, match) => {
@@ -11,18 +10,9 @@ bot.onText(/\/curse/, (msg, match) => {
     reply_markup: {
       inline_keyboard: [
         [
-          {
-            text: "Покупка - ↓",
-            callback_data: "S"
-          },
-          {
-            text: "Продажа - ↑",
-            callback_data: "B"
-          },
-          {
-            text: "⚙",
-            callback_data: "Settings"
-          }
+          { text: "Покупка - ↓", callback_data: "S" },
+          { text: "Продажа - ↑", callback_data: "B" },
+          { text: "⚙", callback_data: "Settings" },
         ]
       ]
     }
@@ -30,66 +20,47 @@ bot.onText(/\/curse/, (msg, match) => {
 
   bot.on("callback_query", query => {
     const id = query.message.chat.id;
-    if (query.data === "S") {
-      bot.sendMessage(id, "Выберите валюту", {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "€ - EUR",
-                callback_data: "EUR"
-              },
-              {
-                text: "$ - USD",
-                callback_data: "USD"
-              },
-              {
-                text: "₽ - RUB",
-                callback_data: "RUB"
-              }
+
+    switch (query.data) {
+      case "S":
+        bot.sendMessage(id, "Выберите валюту", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "€ - EUR", callback_data: "EUR" },
+                { text: "$ - USD", callback_data: "USD" },
+                { text: "₽ - RUB", callback_data: "RUB" },
+              ]
             ]
-          ]
-        }
-      });
-    } else if (query.data === "B") {
-      bot.sendMessage(id, "Выберите валюту", {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "€ - EUR",
-                callback_data: "EURb"
-              },
-              {
-                text: "$ - USD",
-                callback_data: "USDb"
-              },
-              {
-                text: "₽ - RUB",
-                callback_data: "RUBb"
-              }
+          }
+        });
+        break;
+
+      case "B":
+        bot.sendMessage(id, "Выберите валюту", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "€ - EUR", callback_data: "EURb" },
+                { text: "$ - USD", callback_data: "USDb" },
+                { text: "₽ - RUB", callback_data: "RUBb" },
+              ]
             ]
-          ]
-        }
-      });
-    }
-    else if (query.data === "Settings") {
-      bot.sendMessage(id, "Выберите валюту", {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Уведомления - 🔔",
-                callback_data: "Message"
-              },
-              {
-                text: "Настройки валют - 💲",
-                callback_data: "Valuta"
-              }
+          }
+        });
+        break;
+      case "Settings":
+        bot.sendMessage(id, "Выберите валюту", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "Уведомления - 🔔", callback_data: "Message" },
+                { text: "Настройки валют - 💲", callback_data: "Valuta" },
+              ]
             ]
-          ]
-        }
-      });
+          }
+        });
+        break;
     }
     query.data = "";
   });
@@ -125,11 +96,10 @@ bot.on("callback_query", query => {
 
 bot.on("callback_query", query => {
   const chatId = query.message.chat.id;
-  //console.log(query.data);
+
   if (query.data === "Message")
-
-
     bot.sendMessage(chatId, "Тут будут настройки уведомлений");
+
   if (query.data === "Valuta")
     bot.sendMessage(chatId, "Тут будут настройки валют");
 });
